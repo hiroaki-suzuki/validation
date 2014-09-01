@@ -1,20 +1,30 @@
 package net.jp.rirazou.validation;
 
+import static net.jp.rirazou.validation.ListRequired.*;
 import static net.jp.rirazou.validation.Required.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
 public class ValidatorTest {
 
     @Test
-    public void testInvalid() {
+    public void testValid() {
         Validator validator = new Validator() {
+            private List<String> getList() {
+                List<String> list = new ArrayList<String>();
+                list.add("list-A");
+                return list;
+            }
+
             @Override
-            public void specify() {
-                add(required("A", "Aが空です"));
-                add(required("B ", "Bが空です"));
+            public void define() {
+                add(required("A", ""));
+                add(listRequired(getList(), ""));
             }
         };
 
@@ -22,12 +32,12 @@ public class ValidatorTest {
     }
 
     @Test
-    public void testValid() {
+    public void testInvalid() {
         Validator validator = new Validator() {
             @Override
-            public void specify() {
-                add(required("A", ""));
-                add(required(" ", ""));
+            public void define() {
+                add(required("A", "Aが空です"));
+                add(listRequired(new ArrayList<String>(), "リストが空です"));
             }
         };
 

@@ -27,7 +27,7 @@ public abstract class Validator {
     /**
      * バリデーションの定義をおこなう抽象メソッド。
      */
-    public abstract void specify();
+    public abstract void define();
 
     /**
      * specifyで定義されたバリデーションを実施しその結果を返す。
@@ -35,7 +35,7 @@ public abstract class Validator {
      * @return trueなら正しい、falseなら不正
      */
     public boolean validate() {
-        specify();
+        define();
 
         for (Validation<?> validation : validations) {
             if (!validation.validate()) {
@@ -54,4 +54,5 @@ public abstract class Validator {
     protected <T> void add(Validation<? super T> validation) {
         validations.add(validation);
     }
+
 }

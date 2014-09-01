@@ -8,6 +8,12 @@ import org.junit.Test;
 public class RequiredTest {
 
     @Test
+    public void testNull() {
+        Required req = Required.required(null, "");
+        assertThat(req.validate(), is(false));
+    }
+
+    @Test
     public void testEmptyStr() {
         Required req = Required.required("", "");
         assertThat(req.validate(), is(false));
@@ -30,11 +36,4 @@ public class RequiredTest {
         Required req3 = Required.required("a　a a", "");
         assertThat(req3.validate(), is(true));
     }
-
-    @Test
-    public void testInvalidMessage() throws Exception {
-        Required req = Required.required("test", "空文字です");
-        assertThat(req.getInvalidMessage(), is("空文字です"));
-    }
-
 }
