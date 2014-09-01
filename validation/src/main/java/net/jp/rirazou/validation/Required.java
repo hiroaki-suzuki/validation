@@ -1,83 +1,69 @@
 package net.jp.rirazou.validation;
 
 /**
- * 必須チェックをおこなうクラス。<br>
- * nullチェックを行い、その後オブジェクトをtoStringで文字列に変換し、その値が空かどうかを判定する。
+ * 文字列の必須チェックをおこなうクラス。<br>
+ * 検証値として渡された文字列に対して、nullチェックと空文字の判定を行う。 空白系の文字列を許可するかどうかを指定することが出来る、デフォルトは空白系の文字列は許可しない設定になっている。
  *
  * @author Hiroaki Suzuki
  *
  * @param <T> 検証値の型
  */
-public class Required<T> extends Validation<T> {
+public class Required extends Validation<String> {
 
-	/** 空白関連の文字列を許可するかどうか */
-	private boolean allowWhiteSpace;
+    /** 空白関連の文字列を許可するかどうか */
+    private boolean allowWhiteSpace;
 
-	/**
-	 * 必須チェックを行うインスタンスを生成する。
-	 *
-	 * @param value 検証値
-	 * @param invalidMessage 不正だった場合のメッセージ
-	 */
-	protected Required(T value, String invalidMessage) {
-		this(value, invalidMessage, false);
-	}
+    /**
+     * 必須チェックを行うインスタンスを生成する。
+     *
+     * @param value 検証値
+     * @param invalidMessage 不正だった場合のメッセージ
+     */
+    protected Required(String value, String invalidMessage) {
+        this(value, invalidMessage, false);
+    }
 
-	/**
-	 * 必須チェックを行い、その際に空白関連の文字列を許可するかどうかを指定できるインスタンスを生成する。
-	 *
-	 * @param value 検証値
-	 * @param invalidMessage 不正だった場合のメッセージ
-	 * @param allowWhiteSpace 空白関連の文字列を許可するかどうか
-	 */
-	protected Required(T value, String invalidMessage, boolean allowWhiteSpace) {
-		super(value, invalidMessage);
-		this.allowWhiteSpace = allowWhiteSpace;
-	}
+    /**
+     * 必須チェックを行うインスタンスを生成する。
+     *
+     * @param value 検証値
+     * @param invalidMessage 不正だった場合のメッセージ
+     * @return 必須チェックインスタンス
+     */
+    public static Required required(String value, String invalidMessage) {
+        return new Required(value, invalidMessage);
+    }
 
-	/**
-	 * 必須チェックを行うインスタンスを生成する。
-	 *
-	 * @param value 検証値
-	 * @param invalidMessage 不正だった場合のメッセージ
-	 * @return 必須チェックインスタンス
-	 */
-	public static <T> Required<T> required(T value, String invalidMessage) {
-		return new Required<T>(value, invalidMessage);
-	}
+    /**
+     * 必須チェックを行い、その際に空白関連の文字列を許可するかどうかを指定できるインスタンスを生成する。
+     *
+     * @param value 検証値
+     * @param invalidMessage 不正だった場合のメッセージ
+     * @param allowWhiteSpace 空白関連の文字列を許可するかどうか
+     * @return 必須チェックインスタンス
+     */
+    public static Required required(String value, String invalidMessage, boolean allowWhiteSpace) {
+        return new Required(value, invalidMessage, allowWhiteSpace);
+    }
 
-	/**
-	 * 必須チェックを行い、その際に空白関連の文字列を許可するかどうかを指定できるインスタンスを生成する。
-	 *
-	 * @param value 検証値
-	 * @param invalidMessage 不正だった場合のメッセージ
-	 * @param allowWhiteSpace 空白関連の文字列を許可するかどうか
-	 * @return 必須チェックインスタンス
-	 */
-	public static <T> Required<T> required(T value, String invalidMessage, boolean allowWhiteSpace) {
-		return new Required<T>(value, invalidMessage, allowWhiteSpace);
-	}
+    /**
+     * 必須チェックを行い、その際に空白関連の文字列を許可するかどうかを指定できるインスタンスを生成する。
+     *
+     * @param value 検証値
+     * @param invalidMessage 不正だった場合のメッセージ
+     * @param allowWhiteSpace 空白関連の文字列を許可するかどうか
+     */
+    protected Required(String value, String invalidMessage, boolean allowWhiteSpace) {
+        super(value, invalidMessage);
+        this.allowWhiteSpace = allowWhiteSpace;
+    }
 
-	@Override
-	protected boolean validate() {
-		if (getValue() == null) {
-			return false;
-		}
-		String val = getValue().toString();
-
-		int strLen;
-		if ((strLen = val.length()) == 0) {
-			return false;
-		}
-
-		for (int i = 0; i < strLen; i++) {
-			if (Character.isWhitespace(val.charAt(i)) == false) {
-				return true;
-			}
-			if (allowWhiteSpace) {
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    protected boolean validate() {
+        if (allowWhiteSpace) {
+            return ValidationUtils.isNotEmpty(getValue());
+        } else {
+            return ValidationUtils.isNotBlank(getValue());
+        }
+    }
 }
