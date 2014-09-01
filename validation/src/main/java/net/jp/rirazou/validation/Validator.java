@@ -3,8 +3,11 @@ package net.jp.rirazou.validation;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
+/**
+ *
+ * @author Hiroaki Suzuki
+ *
+ */
 public abstract class Validator {
 
 	private List<Validation<?>> validations;

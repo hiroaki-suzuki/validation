@@ -3,8 +3,7 @@ package net.jp.rirazou.validation;
 /**
  * バリデーションを行う抽象クラス。
  *
- * @version $Revision: 740 $ $Date: 2014-08-21 15:37:01 +0900 (木, 21 8 2014) $
- * @author $Author: h-suzuki $
+ * @author Hiroaki Suzuki
  *
  * @param <T> 検証値の型
  */
